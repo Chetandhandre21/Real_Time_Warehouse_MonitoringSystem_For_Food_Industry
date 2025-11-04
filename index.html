@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Monitoring Dashboard</title>
+    <style>
+        body { font-family: Arial; text-align: center; background: #f4f4f4; }
+        h1 { color: #333; }
+        .card { background: #fff; padding: 20px; margin: 20px auto; width: 300px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+        .value { font-size: 2em; color: #007BFF; }
+    </style>
+</head>
+<body>
+    <h1>Warehouse Monitoring Dashboard</h1>
+
+    <div class="card">
+        <h2>Temperature (°C)</h2>
+        <div id="temp" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h2>Humidity (%)</h2>
+        <div id="humidity" class="value">--</div>
+    </div>
+
+    <div class="card">
+        <h2>Gas Level</h2>
+        <div id="gas" class="value">--</div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Function to update dashboard
+        function updateData() {
+            database.ref('Warehouse').on('value', (snapshot) => {
+                const data = snapshot.val();
+                document.getElementById('temp').innerText = data.Temperature.toFixed(1);
+                document.getElementById('humidity').innerText = data.Humidity.toFixed(1);
+                document.getElementById('gas').innerText = data.Gas;
+            });
+        }
+
+        updateData();
+    </script>
+</body>
+</html>
